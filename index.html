@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SitePro Express</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f1f4f9;
+    color: #222;
+}
+
+header {
+    background: #101d35;
+    color: white;
+    padding: 22px;
+    text-align: center;
+}
+
+header h1 {
+    color: #00d68f;
+}
+
+header p {
+    margin-top: 8px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #0001;
+}
+
+h2 {
+    margin-bottom: 18px;
+    color: #142d50;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 7px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    padding: 13px 18px;
+    border: none;
+    border-radius: 7px;
+    background: #00b879;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+.dark {
+    background: #111827;
+    color: white;
+}
+
+.dark .card {
+    background: #263449;
+}
+
+.dark h2 {
+    color: #00d68f;
+}
+
+.preview {
+    border: 2px dashed #00b879;
+    padding: 20px;
+    border-radius: 12px;
+    min-height: 250px;
+}
+
+.preview h1 {
+    color: #00b879;
+    margin-bottom: 12px;
+}
+
+.service {
+    padding: 10px;
+    background: #eef5f2;
+    margin-top: 8px;
+    border-radius: 6px;
+}
+
+.whatsapp {
+    display: inline-block;
+    background: #20c968;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 7px;
+    color: white;
+    text-decoration: none;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    background: #101d35;
+    color: white;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>SitePro Express</h1>
+    <p>Crée ton site Internet professionnel en quelques minutes.</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Créer mon site Internet</h2>
+
+<label>Nom de ton entreprise</label>
+<input id="nom" placeholder="Ex : Chez Maman Thérèse">
+
+<label>Type de commerce</label>
+
+<select id="type">
+<option>Restaurant</option>
+<option>Boutique</option>
+<option>Coiffure</option>
+<option>Informatique</option>
+<option>Autres services</option>
+</select>
+
+<label>Description de ton entreprise</label>
+<textarea id="description"
+placeholder="Présente ton entreprise..."></textarea>
+
+<label>Numéro WhatsApp</label>
+<input id="telephone"
+placeholder="2376XXXXXXXX">
+
+<label>Nom du premier service ou produit</label>
+<input id="service1" placeholder="Ex : Poisson braisé">
+
+<label>Prix du premier service (FCFA)</label>
+<input id="prix1" type="number" placeholder="5000">
+
+<label>Nom du deuxième service ou produit</label>
+<input id="service2" placeholder="Ex : Poulet braisé">
+
+<label>Prix du deuxième service (FCFA)</label>
+<input id="prix2" type="number" placeholder="3500">
+
+<label>Nom du troisième service ou produit</label>
+<input id="service3" placeholder="Ex : Jus naturel">
+
+<label>Prix du troisième service (FCFA)</label>
+<input id="prix3" type="number" placeholder="1000">
+
+<label>Adresse de ton commerce</label>
+<input id="adresse" placeholder="Ex : Douala, Akwa">
+
+<button onclick="actualiser()">
+Voir mon aperçu
+</button>
+
+<button onclick="telecharger()">
+Télécharger mon site
+</button>
+
+<button onclick="modeSombre()">
+Mode clair / sombre
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Aperçu de ton site</h2>
+
+<div class="preview" id="apercu">
+
+<h1>Mon entreprise</h1>
+
+<p>Bienvenue sur mon site professionnel.</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Publication du site</h2>
+
+<p>
+Après avoir téléchargé ton site, tu peux l'héberger
+sur Internet pour que tes clients puissent le consulter.
+</p>
+
+<p id="statut">
+Statut : En attente de création.
+</p>
+
+</div>
+
+</div>
+
+<footer>
+<p>SitePro Express © 2026</p>
+<p>Création de sites professionnels au Cameroun.</p>
+</footer>
+
+<script>
+
+function obtenirDonnees() {
+
+    return {
+
+        nom: document.getElementById("nom").value || "Mon entreprise",
+
+        type: document.getElementById("type").value,
+
+        description: document.getElementById("description").value,
+
+        telephone: document.getElementById("telephone").value,
+
+        adresse: document.getElementById("adresse").value,
+
+        services: [
+
+            {
+                nom: document.getElementById("service1").value,
+                prix: document.getElementById("prix1").value
+            },
+
+            {
+                nom: document.getElementById("service2").value,
+                prix: document.getElementById("prix2").value
+            },
+
+            {
+                nom: document.getElementById("service3").value,
+                prix: document.getElementById("prix3").value
+            }
+
+        ]
+
+    };
+
+}
+
+function echapper(texte) {
+
+    return String(texte).replace(/[&<>"']/g, function(c) {
+
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+
+        }[c];
+
+    });
+
+}
+
+function contenuSite(d) {
+
+    let services = d.services
+    .filter(s => s.nom)
+    .map(s => `
+        <div class="service">
+            <h3>${echapper(s.nom)}</h3>
+            <p>${echapper(s.prix)} FCFA</p>
+        </div>
+    `).join("");
+
+    let numero = d.telephone.replace(/\D/g, "");
+
+    let whatsapp = numero
+    ? `<a class="whatsapp"
+       href="https://wa.me/${encodeURIComponent(numero)}">
+       Contacter sur WhatsApp</a>`
+    : "";
+
+    return `
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>${echapper(d.nom)}</title>
+
+<style>
+
+body {
+    font-family: Arial;
+    background: #f4f6f8;
+    margin: 0;
+    text-align: center;
+}
+
+header {
+    background: #102b48;
+    color: white;
+    padding: 45px 15px;
+}
+
+h1 {
+    color: #00c982;
+}
+
+section {
+    background: white;
+    margin: 20px auto;
+    padding: 25px;
+    max-width: 600px;
+    border-radius: 12px;
+}
+
+.service {
+    background: #eef5f2;
+    padding: 15px;
+    margin: 12px;
+    border-radius: 8px;
+}
+
+.whatsapp {
+    display: inline-block;
+    background: #20c968;
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>${echapper(d.nom)}</h1>
+
+<p>${echapper(d.type)}</p>
+
+</header>
+
+<section>
+
+<h2>Bienvenue chez nous !</h2>
+
+<p>${echapper(d.description)}</p>
+
+<p>Adresse : ${echapper(d.adresse)}</p>
+
+</section>
+
+<section>
+
+<h2>Nos produits et services</h2>
+
+${services}
+
+${whatsapp}
+
+</section>
+
+<footer>
+
+<p>Site créé avec SitePro Express</p>
+
+</footer>
+
+</body>
+</html>
+
+`;
+
+}
+
+function actualiser() {
+
+    let d = obtenirDonnees();
+
+    document.getElementById("apercu").innerHTML = contenuSite(d)
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<html[\s\S]*?<body>/i, "")
+    .replace(/<\/body>[\s\S]*/i, "");
+
+    document.getElementById("statut").innerText =
+    "Statut : Aperçu généré avec succès.";
+
+}
+
+function telecharger() {
+
+    let d = obtenirDonnees();
+
+    let fichier = new Blob(
+        [contenuSite(d)],
+        {type: "text/html;charset=utf-8"}
+    );
+
+    let lien = document.createElement("a");
+
+    lien.href = URL.createObjectURL(fichier);
+
+    lien.download = "mon-site.html";
+
+    lien.click();
+
+    URL.revokeObjectURL(lien.href);
+
+    document.getElementById("statut").innerText =
+    "Statut : Site HTML téléchargé.";
+
+}
+
+function modeSombre() {
+
+    document.body.classList.toggle("dark");
+
+}
+
+</script>
+
+</body>
+</html>
